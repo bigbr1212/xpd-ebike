@@ -1,0 +1,26 @@
+3:EB312
+30     
+12.0
+52.0
+0.1
+99
+0:Switch 3Spd X1 X2
+30
+80
+120
+1.5
+15.0
+1:Only Fake Indicate
+1:Comm GND
+1:
+00
+75
+0:Low
+0:None
+0:Ture
+03
+0:Speed1
+120
+0:120 Degree
+30
+0:No

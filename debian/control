@@ -1,0 +1,17 @@
+Source: xpd
+Section: electronics
+Priority: optional
+Maintainer: Andrew Zabolotny <zap@cobra.ru>
+Build-Depends-Indep: debhelper (>= 4.2.28), python-central (>= 0.4.7), cdbs (>= 0.4.49)
+XS-Python-Version: all
+Standards-Version: 3.7.2
+
+Package: xpd
+Architecture: all
+Depends: ${python:Depends}, python-gtk2, python-serial
+XB-Python-Version: ${python:Versions}
+Description: Infineon e-bike controller setup tool
+ XPD is a cross-platform replacement for the widely known in close circles
+ Parameter Design tool (also known as Keywin e-Bike Lab), used to set the
+ parameters of a e-bike controller based on the Infineon XC846 microcontroller
+ (and various clones).

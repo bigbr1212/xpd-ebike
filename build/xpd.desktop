@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=XPD
+GenericName=eXtended Parameter Designer for e-bike Infineon controllers
+GenericName[ru]=Расширенный редактор параметров для контроллеров Инфинеон
+Exec=xpd
+TryExec=xpd
+Terminal=false
+Type=Application
+Icon=xpd
+Categories=GTK;Electronics;Engineering;
+StartupNotify=true

@@ -1,0 +1,15 @@
+Translating TinyAVI to a new language is simple.
+
+1. Copy template.pot to the .po file of your language.
+   For example:
+
+        cp po/template.pot po/xyz.po
+
+2. Now touch some source file and run make:
+
+        touch xpd; make update-po
+
+3. Now translate everything you see in your new .po file, and
+   install it by running:
+
+        make install

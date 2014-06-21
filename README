@@ -1,0 +1,21 @@
+XPD - eXtended Parameter Designer
+---------------------------------
+
+This program was developed to be a drop-in cross-platform replacement
+for the widely known in close circles Parameter Design tool (also known
+as Keywin e-Bike Lab), used toset the parameters of a e-bike controller
+based on the Infineon XC846 microcontroller (and various clones).
+
+This program is written in and requires Python, and also requires the
+PyGTK and PySerial (version 2.3 and up) libraries, so install them before
+using the program.
+
+To install the program, just execute (as root):
+
+        make install
+
+A detailed list of changes between versions can be found in debian/changelog.
+
+
+author:
+Andrey Zabolotnyi <zap@cobra.ru>

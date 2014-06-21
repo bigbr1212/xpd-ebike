@@ -1,0 +1,53 @@
+#!/usr/bin/python
+# this program will help you peek the data that Parameter Designer is uploading
+# into the controller, without a controller. Just cross-connect the programming
+# cable to yet another RS232-UART adapter (e.g. RX to TX and TX to RX), and
+# launch this program on the second serial port, it will "simulate" a real
+# controller.
+
+import sys, time
+
+try:
+    import serial
+except:
+    print "You must have the PySerial Python library installed for this program to work!"
+    sys.exit (-1)
+
+ser = serial.Serial ("/dev/ttyUSB1", 9600, serial.EIGHTBITS, serial.PARITY_NONE,
+    serial.STOPBITS_ONE, timeout=0.5)
+
+while True:
+    c = ser.read (1)
+    if c == '8':
+        ser.write ('U')
+        print "\nGot data:"
+        data = bytearray ()
+        while True:
+            c = ser.read ()
+            if not c:
+                break
+            data.extend (c)
+            if len (data) >= 32:
+                break
+
+        ser.write ('U')
+
+        for x in range (len (data)):
+            if (x == 0) or (x == 16):
+                sys.stdout.write ("\n%04x  " % x)
+            sys.stdout.write (" %02x " % data [x])
+        sys.stdout.write ("\n")
+        crc = 0
+        for x in range (len (data)):
+            if (x == 0) or (x == 16):
+                sys.stdout.write ("\n%04x  " % x)
+            sys.stdout.write ("%3d " % data [x])
+            if x < len (data) - 1:
+                crc = crc ^ data [x]
+        sys.stdout.write ("\n")
+        print "crc = %04x (%d)" % (crc, crc % 256)
+        break
+
+
+time.sleep (1)
+ser.close ()

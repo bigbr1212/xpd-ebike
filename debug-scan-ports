@@ -1,0 +1,24 @@
+#!/usr/bin/python
+# just a small test program to check how the serial port detection works
+
+import xpdm
+import serial
+
+print "-"*78
+print "Serial ports"
+print "-"*78
+for order, port, desc, hwid in sorted (xpdm.comports ()):
+    print "%-10s: %s (%s) ->" % (port, desc, hwid),
+    try:
+        serial.Serial(port) # test open
+    except serial.serialutil.SerialException:
+        print "can't be openend"
+    else:
+        print "Ready"
+print
+# list of all ports the system knows
+print "-"*78
+print "All serial ports (registry)"
+print "-"*78
+for order, port, desc, hwid in sorted(xpdm.comports(False)):
+    print "%-10s: %s (%s)" % (port, desc, hwid)

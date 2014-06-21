@@ -1,0 +1,45 @@
+xpd (0.3.1-1ubuntu1) lucid; urgency=low
+
+  * Added Infineon 3 support! Both "stock" and "CellMan" variants are supported.
+  * Fixed a long-standing bug that caused XPD to abnormally exit when trying to
+    program last controller in internal list (in older version that was
+    EB232/Lyen).
+  * The serial port list is updated in real time now, at least on Linux
+  * Some changes in interface to make it even more end-user friendly
+  * Added support for "Crystalyte" EB218 controller
+  * German translation by Maximilian Federle <max.federle@googlemail.com>
+
+ -- Andrew Zabolotny <zap@cobra.ru>  Wed, 29 Aug 2012 00:41:28 +0400
+
+xpd (0.2.2-1) unstable; urgency=low
+
+  * Added the "Unlimited" EBS level (undocumented feature).
+
+ -- Andrew Zabolotny <zap@cobra.ru>  Fri, 5 Sep 2011 00:42:03 +0400
+
+xpd (0.2.1-1) unstable; urgency=low
+
+  * The serial buffer is flushed before starting reprogramming the controller.
+    Sometimes there's garbage there, which results in XPD complaining
+    "Invalid reply byte".
+  * Some controllers (e.g. I experienced this on sensorless Lyen/EB206) in some
+    circumstances (e.g. when enabling regeneration) will send a wrong '0' byte
+    when programmed. This version will correctly ignore them, still allowing
+    to program such controllers.
+
+ -- Andrew Zabolotny <zap@cobra.ru>  Fri, 12 Aug 2011 12:03:03 +0400
+
+xpd (0.2.0-1) unstable; urgency=low
+
+  * Added the "Copy" profile button
+  * Added Lyen controller modifications: 6, 9, 12, 15, 18, 24 and 36-FET versions.
+  * Better error handling (will report errors rather than hanging)
+  * Older PySerial 2.3 is now supported (Debian & Ubuntu)
+
+ -- Andrew Zabolotny <zap@cobra.ru>  Thu, 05 May 2011 00:22:19 +0300
+
+xpd (0.1.0-1) unstable; urgency=low
+
+  * First public release
+
+ -- Andrew Zabolotny <zap@cobra.ru>  Thu, 05 May 2011 00:22:19 +0300

@@ -1,0 +1,254 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<link rel="stylesheet" type="text/css" href="docs.css">
+<title>The eXtended Parameter Designer</title>
+</head>
+<body>
+
+<br>
+
+<table width="100%" style="background-color: #282828; border-top: solid 2px #383838; border-bottom: solid 2px black;">
+<tr>
+    <td width="33%" style="text-align: center">
+        <a href="https://developer.berlios.de/project/showfiles.php?group_id=12389">Download</a>
+    </td>
+    <td width="33%" style="text-align: center">
+        <a href="https://developer.berlios.de/projects/xpd/">Development Homepage</a>
+    </td>
+    <td width="33%" style="text-align: center">
+        <a href="https://developer.berlios.de/bugs/?group_id=12389">Report a bug</a>
+    </td>
+</tr>
+</table>
+
+<h1>What is this?</h1>
+
+<p>XPD is a cross-platform, open-source rewrite of a tool named Parameter Designer
+(sometimes also named Keywin e-Bike Lab). The original program was written in
+Visual Basic, and only the windows executable file was distributed, thus,
+it is not possible to enhance or port it to other platforms.
+</p>
+
+<p>I started this project after I discovered how easy was to understand the serial
+protocol used between the Parameter Designer and the e-bike controller. Besides,
+I had a dream to be able to change e-bike settings anytime, anywhere. This would
+be possible if it would be possible to change controller settings using some
+portable device with serial port capabilities, for example my Nokia N900 phone.
+</p>
+
+<p>The obligatory screenshot:
+</p>
+
+<img src="img/screenshot.png" />
+
+<h1>Infineon e-bike controller protocol</h1>
+
+<p>I wrote a more or less full description of the e-bike controller protocol
+using Google docs.
+<a href="https://docs.google.com/document/pub?id=1o228c4BnMCrW5sicpY1QmT1DVV4KH2ZQiPhDTYJBFjk">
+Here is a link to the (always) latest version</a>
+<p>
+
+<h1>Differences between XPD and its predcessor</h1>
+
+<p>You may notice several differences between the way how XPD presents the
+controller parameters, and the way how Parameter Designer used to do it.
+I'll list here the most important differences, with detailed explanations.
+<p>
+
+<dl>
+<dt>Many numeric parameters have 0.1 precision, while PD used integer numbers</dt>
+<dd>Of course, nobody should expect the controller will control these values
+up to the displayed precision. However, controller uses different units internally
+for most values, and if you translate successive internal-units values to SI system
+using integer values, you might get the same number for different amounts in internal
+controller units. Thus I have decided to display the values with 0.1 precision, this
+will let you choose between 31.9 and 32.2 amperes (which otherwise would be both
+displayed as 32).
+</dd>
+<dt>121% speed? WTF? Why not 120%?</dt>
+<dd>As said above, controller uses different units for most parameters, and they
+are integer numbers in the range 0-255. For example, controller value 90 maps to
+114.3% speed, 91 to 115.6%, 92 to 116.8%, 93 to 118.1%, 94 to 119.4% and 95 to 120.7%.
+When these numbers are rounded to nearest integer, 120.7 is rounded to 121%, and
+119.4 is rounded to 119%. That's why there's no "120%" setting at all.</dd>
+<dt>The range of selectable values is SO MUCH larger</dt>
+<dd>As I said before, the controller uses its internal scale for measuring
+volts and amperes. This scale depends on the values of some components on the
+board, and for some controllers the internal range would really map to this
+extremely large real-world scale. This does not really mean that EB218 will
+handle phase currents up to 1300 amperes (wow) in the real world, you still have
+to make sure the actual power MOSFETs can deal properly with the selected
+currents.</dd>
+<dt>Why Parameter Designer can't load asv files saved by XPD?</dt>
+<dd>There are several variants of Parameter Designer, and one can't even
+load the files saved by another variant. The reason is that the asv format
+is utterly broken, XPD accepted it just for the reason not to create yet
+another parameter format, but this may change in the future, if PD authors
+will keep changing it with every release. The ugly thing is the way how
+Parameter Designer loads asv files: it matches not only the numeric values,
+but the textual hints (which come after a ':') as well; this means
+incompatibility between English, Chinese, French, Lyen versions of
+Parameter Designer. XPD has chosen to save just the numeric values,
+without the double-colon and textual hint after them.</dd>
+</dl>
+
+<h1>Installation</h1>
+
+<h2>Microsoft Windows</h2>
+
+<ol>
+<li><a href="https://developer.berlios.de/project/showfiles.php?group_id=12389">
+Download xpd-windows-prereq.zip</a> and unpack it to some temp directory (the files
+may be deleted after they are used).</li>
+<li>Inside there are three installers for three XPD pre-requisites:
+<ul>
+<li><code>python-2.7.1.msi</code> - This is Python interpreter, install it first.
+<li><code>pygtk-all-in-one-2.22.6.win32-py2.7.msi</code> - This is the GTK+
+llibrary (the graphical user interface library) and the Python bindings for it,
+install this after Python.
+<li><code>pyserial-2.5.win32.exe</code> - Run this to install the PySerial library
+</ul>
+</li>
+<li>Now <a href="https://developer.berlios.de/project/showfiles.php?group_id=12389">
+download XPD itself</a>, xpd-*-windows.zip, and unzip it to <code>C:\Program Files\</code>
+(or any other place at your choice).</li>
+<li>Open the xpd-* folder (created when you extract the archive), you will see
+two icons: the XPD program and the XPD icon. Run the program (not the icon :))
+with a double-click. If all goes well, it should start and you will see a window
+like displayed on the screenshot above.
+</li>
+<li>If you intend to use it often, create a shortcut for it (Ctrl+Shift and drag
+the program to desktop), then you may change program's icon to the one provided
+in xpd' directory.</li>
+</ol>
+
+<p>Also, of course, you must install the drivers for the respective USB-to-UART
+cable you are using (PL2303, FT232, CP2102 etc).
+</p>
+
+<h2>Linux</h2>
+
+<p>If you're using the Ubuntu/Debian or Fedora Linux distributions, just
+<a href="https://developer.berlios.de/project/showfiles.php?group_id=12389">
+download the respective binary package</a> (.deb or .rpm respectively) and install it.
+</p>
+
+<p>Otherwise, <a href="https://developer.berlios.de/project/showfiles.php?group_id=12389">
+download the source code tarball</a> (<code>xpd-*.tar.bz2</code>), unpack it somewhere,
+enter the xpd-* directory and run "make install" as root. If all pre-requisites are
+in place (e.g. Python, PySerial, PyGTK) it will easily install. Now you can run xpd
+either via the "Applications" menu (should be in "Electronics" section), or just
+run the "xpd" command from terminal or otherwise.
+</p>
+
+<p>Now it may happen that the "Serial port" combobox in xpd is empty. This means
+one of two things: either you don't have serial ports at all, or your user account
+does not have access to serial port devices. Check the access rights on the serial
+ports:
+<p>
+
+<pre>
+$ ls -la /dev/tty*S*
+crw-rw---- 1 root dialout   4, 64 Июн  4 23:55 /dev/ttyS0
+crw-rw---- 1 root dialout   4, 65 Май 11 21:00 /dev/ttyS1
+crw-rw---- 1 root dialout   4, 66 Май 11 21:00 /dev/ttyS2
+crw-rw---- 1 root dialout   4, 67 Май 11 21:00 /dev/ttyS3
+crw-rw---- 1 root dialout 188,  0 Июн  5 10:07 /dev/ttyUSB0
+crw-rw---- 1 root dialout 188,  1 Июн  5 10:07 /dev/ttyUSB1
+</pre>
+
+<p>Okay, so the "dialout" group has write access to serial ports. Now you just have
+to add your account to this group ("dialout" in my case), either via administration
+tools, or quicker via the command line:
+<p>
+
+<pre>
+$ usermod -a -G dialout <userid>
+</pre>
+
+<p>Now relogon, and you should gain access to serial ports.
+</p>
+
+<p>Another problem that may happen is that some shitty tools may put various trash
+into the serial ports at random times. For example, openct contains a driver for
+smart card readers attached to serial ports (<code>/lib/udev/openct_serial</code>).
+To simulate "plug-and-pray" this shit often writes to serial port various strings,
+waiting for an answer from the device. If you get unexpected problems (e.g. xpd
+starts talking with the controller then locks, etc), you may try to catch the
+S-O-B with the pants down by using the command:
+</p>
+
+<pre>
+fuser -v /dev/ttyUSB0 # or whatever serial port you are using
+</pre>
+
+<p>This command will list the processes that use a file (or device).
+I recommend deinstalling the openct package, most people don't need it anyway.
+</p>
+
+<h1>Usage</h1>
+
+<p>The basic usage of the program should be quite obvious for anybody who can
+handle a computer mouse. The main program window displays a list of existing
+controller profiles, you may create, edit, delete and apply profiles. In the
+bottom-right corner of the window you may select the serial port to which
+you connected the controller programming cable.
+</p>
+
+<p>The controller looks for profiles in two directories: first, this is the
+program data directory (/usr/share/xpd/ on Linux, share/ on Windows), and
+second, in the user's home data directory (~/.local/share/xpd/ on Linux,
+"C:\Documents and Settings\Username\My Documents\xpd" on Windows).
+</p>
+
+<p>Also on Linux I would suggest to enable icons-on-buttons (which is now disabled
+by default in GNOME, and the interface settings page was removed too,
+<a href="http://mail.gnome.org/archives/gnomecc-list/2009-July/msg00015.html">
+it was argued</a> that icons on buttons are "bad design decisions").
+So you'll have to launch gconf-editor, navigate to
+<code>/desktop/gnome/interface/</code> folder and enable the
+<code>buttons_have_icons</code> setting.
+</p>
+
+<a name="license"></a>
+<h1>License</h1>
+
+<p>XPD is licensed under the terms of
+<a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License</a>
+version 3 or later.
+</p>
+
+<a name="credits"></a>
+<h1>Credits</h1>
+
+<p>So far this is a solo project, so the only contributor for now is:
+</p>
+
+<ul>
+<li><b>Andrey Zabolotnyi</b> &lt;<script type="text/javascript">
+<!--- script source = 'www.spamstop.org'
+function spamfreemail(){ var
+dom='&#x63;&#x6F;&#x62;&#x72;&#x61;.&#x72;&#x75;',
+display='&#x7A;&#x61;&#x70;&#x40;&#x63;&#x6F;&#x62;&#x72;&#x61;.&#x72;&#x75;',
+x40='&#x40;',
+part1='&#x6D;&#x61;&#x69;&#x6C;&#x74;&#x6F;:',
+name='&#x7A;&#x61;&#x70;';
+stuff='';
+document.write('<a title="'+display+'" href="'+part1+name+x40+dom+stuff+'">'+display+'<\/a>');}
+spamfreemail()
+-->
+</script>&gt;
+<a href="http://cobra.ru/zap/private/get-them-all.php"><span style="font-size: 0pt">go get some more emails</span></a>
+</ul>
+
+<p>Also I would like to thank the BerliOS project for hosting all my small
+public projects.
+</p>
+
+<a href="http://developer.berlios.de" title="BerliOS Developer"><img src="http://developer.berlios.de/bslogo.php?group_id=12389" width="124px" height="32px" border="0" alt="BerliOS Developer Logo"></a>
+
+</body>
+</html>
