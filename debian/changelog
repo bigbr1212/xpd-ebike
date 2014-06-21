@@ -1,4 +1,20 @@
-xpd (0.3.1-1ubuntu1) lucid; urgency=low
+xpd (0.3.3-1) lucid; urgency=low
+
+  * Fixed a bug that leaded to a crash in Windows if user login contains
+    non-ASCII characters.
+  * Fixed a bug that prevented option list to refresh when changing between
+    Infineon 2 and 3 families because of non-ASCII characters in profile name
+  * Fixed (again) automatic refresh of COM-ports list in Windows
+  * Fixed wrong character set for COM-port errors displayed in Windows
+    (actual for non-Latin based locales)
+
+xpd (0.3.2-1) lucid; urgency=low
+
+  * Added support for EB318/CellMan controller
+  * Fixed a bug in EB312/CellMan and EB218/Crystalyte profiles
+  * Changed the description of PAS Mode for Infineon 2, thanks to "cybershot"
+
+xpd (0.3.1-1) lucid; urgency=low
 
   * Added Infineon 3 support! Both "stock" and "CellMan" variants are supported.
   * Fixed a long-standing bug that caused XPD to abnormally exit when trying to
